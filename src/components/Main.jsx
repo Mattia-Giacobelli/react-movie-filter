@@ -13,6 +13,7 @@ export default function Main() {
         { id: 6, title: 'Pulp Fiction', genre: 'Thriller' },
     ]
 
+
     const [genre, setGenre] = useState('')
     const [filmList, setFilmList] = useState(films)
     const [filteredFilm, setFilteredFilm] = useState(filmList)
@@ -30,16 +31,16 @@ export default function Main() {
         } else {
             setFilteredFilm(filmList)
         }
-    }, [genre])
 
-    useEffect(() => {
         if (searchItem.length > 0) {
             const foundItems = filteredFilm.filter(film => film.title.toLowerCase().includes(searchItem))
             setFilteredFilm(foundItems)
         } else {
             setFilteredFilm(filmList)
         }
-    }, [searchItem])
+    }, [genre, searchItem, filmList])
+
+
 
 
     function handleSubmit(e) {
@@ -54,10 +55,25 @@ export default function Main() {
             title: addTitle,
             genre: addGenre
         }
-        setFilteredFilm([...filmList, newFilm])
+        genreList = getGenres()
+        setFilmList([...filmList, newFilm])
     }
 
 
+    function getGenres() {
+        const newGenres = []
+        filmList.forEach((film) => {
+            if (!newGenres.includes(film.genre)) {
+
+                newGenres.push(film.genre)
+
+            }
+        })
+        console.log(newGenres);
+        return newGenres
+    }
+
+    let genreList = getGenres()
 
     return (
 
@@ -101,10 +117,11 @@ export default function Main() {
                             <select value={genre} onChange={e => setGenre(e.target.value)}
                                 className="form-select w-25" aria-label="Default select example">
                                 <option value="">Select a genre</option>
-                                <option value="Fantascienza">Fantascienza</option>
-                                <option value="Thriller">Thriller</option>
-                                <option value="Romantico">Romantico</option>
-                                <option value="Azione">Azione</option>
+                                {genreList.map((genre, index) => {
+                                    return (
+                                        <option key={index} value={genre}>{genre}</option>
+                                    )
+                                })}
                             </select>
                             <div className="input-group w-50">
                                 <input value={searchItem} onChange={e => setSearchItem(e.target.value)}
