@@ -17,6 +17,9 @@ export default function Main() {
     const [filmList, setFilmList] = useState(films)
     const [filteredFilm, setFilteredFilm] = useState(filmList)
     const [searchItem, setSearchItem] = useState('')
+    const [addTitle, setAddTitle] = useState('')
+    const [addGenre, setAddGenre] = useState('')
+
 
     useEffect(() => {
 
@@ -39,7 +42,20 @@ export default function Main() {
     }, [searchItem])
 
 
+    function handleSubmit(e) {
 
+        console.log(addTitle);
+        console.log(addGenre);
+
+
+        e.preventDefault()
+        const newFilm = {
+            id: Date.now(),
+            title: addTitle,
+            genre: addGenre
+        }
+        setFilteredFilm([...filmList, newFilm])
+    }
 
 
 
@@ -49,6 +65,37 @@ export default function Main() {
             <div className="container d-flex justify-content-center">
                 <div className="col-6">
                     <div className="card">
+
+                        <form onSubmit={e => { handleSubmit(e) }}
+                            className="d-flex flex-column align-items-center  bg-light">
+
+                            <div className="mb-2 pt-3 w-75 text-center">
+                                <label className="form-label">Title</label>
+                                <input
+                                    onChange={e => { setAddTitle(e.target.value) }}
+                                    type="text"
+                                    className="form-control"
+                                    name="title"
+                                    id="title"
+                                    placeholder='Film title here'
+                                    value={addTitle}
+                                />
+                                <label className="form-label">Genre</label>
+                                <input
+                                    onChange={e => { setAddGenre(e.target.value) }}
+                                    type="text"
+                                    className="form-control"
+                                    name="genre"
+                                    id="genre"
+                                    placeholder='Film genre here'
+                                    value={addGenre}
+                                />
+                            </div>
+                            <button type="submit" className="mb-3 btn btn-primary">Add</button>
+
+
+                        </form>
+
                         <form
                             className="d-flex justify-content-between align-items-center p-3">
                             <select value={genre} onChange={e => setGenre(e.target.value)}
