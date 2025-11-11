@@ -16,6 +16,7 @@ export default function Main() {
     const [genre, setGenre] = useState('')
     const [filmList, setFilmList] = useState(films)
     const [filteredFilm, setFilteredFilm] = useState(filmList)
+    const [searchItem, setSearchItem] = useState('')
 
     useEffect(() => {
 
@@ -28,10 +29,17 @@ export default function Main() {
         }
     }, [genre])
 
-    function handleSubmit(e) {
-        e.preventDefault()
-        console.log(genre);
-    }
+    useEffect(() => {
+        if (searchItem.length > 0) {
+            const foundItems = filteredFilm.filter(film => film.title.toLowerCase().includes(searchItem))
+            setFilteredFilm(foundItems)
+        } else {
+            setFilteredFilm(filmList)
+        }
+    }, [searchItem])
+
+
+
 
 
 
@@ -41,7 +49,7 @@ export default function Main() {
             <div className="container d-flex justify-content-center">
                 <div className="col-6">
                     <div className="card">
-                        <form onSubmit={e => handleSubmit(e)}
+                        <form
                             className="d-flex justify-content-between align-items-center p-3">
                             <select value={genre} onChange={e => setGenre(e.target.value)}
                                 className="form-select w-25" aria-label="Default select example">
@@ -52,14 +60,14 @@ export default function Main() {
                                 <option value="Azione">Azione</option>
                             </select>
                             <div className="input-group w-50">
-                                <input type="text" className="form-control"
+                                <input value={searchItem} onChange={e => setSearchItem(e.target.value)}
+                                    type="search" className="form-control"
                                     placeholder="Search by Name" aria-label="Recipient’s username"
                                     aria-describedby="basic-addon2" />
                                 <span className="input-group-text" id="basic-addon2">
                                     <i className="bi bi-search"></i>
                                 </span>
                             </div>
-                            <button type="submit">d a</button>
                         </form>
                     </div>
                     <div className="col-6">
