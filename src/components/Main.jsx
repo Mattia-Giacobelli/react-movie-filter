@@ -12,6 +12,8 @@ export default function Main() {
         { title: 'Pulp Fiction', genre: 'Thriller' },
     ]
 
+    const [genre, setGenre] = useState('Select a genre')
+
 
 
     return (
@@ -21,8 +23,8 @@ export default function Main() {
                 <div className="col-6">
                     <div className="card">
                         <form className="d-flex justify-content-between align-items-center p-3">
-                            <select class="form-select w-25" aria-label="Default select example">
-                                <option selected>Select genre</option>
+                            <select value={genre} onChange={e => setGenre(e.target.value)}
+                                class="form-select w-25" aria-label="Default select example">
                                 <option value="Fantascienza">Fantascienza</option>
                                 <option value="Thriller">Thriller</option>
                                 <option value="Romantico">Romantico</option>
