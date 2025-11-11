@@ -1,18 +1,37 @@
+import { use } from "react"
 import { useState, useEffect } from "react"
 
 
 export default function Main() {
 
     const films = [
-        { title: 'Inception', genre: 'Fantascienza' },
-        { title: 'Il Padrino', genre: 'Thriller' },
-        { title: 'Titanic', genre: 'Romantico' },
-        { title: 'Batman', genre: 'Azione' },
-        { title: 'Interstellar', genre: 'Fantascienza' },
-        { title: 'Pulp Fiction', genre: 'Thriller' },
+        { id: 1, title: 'Inception', genre: 'Fantascienza' },
+        { id: 2, title: 'Il Padrino', genre: 'Thriller' },
+        { id: 3, title: 'Titanic', genre: 'Romantico' },
+        { id: 4, title: 'Batman', genre: 'Azione' },
+        { id: 5, title: 'Interstellar', genre: 'Fantascienza' },
+        { id: 6, title: 'Pulp Fiction', genre: 'Thriller' },
     ]
 
-    const [genre, setGenre] = useState('Select a genre')
+    const [genre, setGenre] = useState('')
+    const [filmList, setFilmList] = useState(films)
+    const [filteredFilm, setFilteredFilm] = useState(filmList)
+
+    useEffect(() => {
+
+        console.log(genre);
+        if (genre.length > 0) {
+            const filter = filmList.filter(film => film.genre === genre)
+            setFilteredFilm(filter)
+        } else {
+            setFilteredFilm(filmList)
+        }
+    }, [genre])
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        console.log(genre);
+    }
 
 
 
@@ -22,23 +41,41 @@ export default function Main() {
             <div className="container d-flex justify-content-center">
                 <div className="col-6">
                     <div className="card">
-                        <form className="d-flex justify-content-between align-items-center p-3">
+                        <form onSubmit={e => handleSubmit(e)}
+                            className="d-flex justify-content-between align-items-center p-3">
                             <select value={genre} onChange={e => setGenre(e.target.value)}
-                                class="form-select w-25" aria-label="Default select example">
+                                className="form-select w-25" aria-label="Default select example">
+                                <option value="">Select a genre</option>
                                 <option value="Fantascienza">Fantascienza</option>
                                 <option value="Thriller">Thriller</option>
                                 <option value="Romantico">Romantico</option>
                                 <option value="Azione">Azione</option>
                             </select>
-                            <div class="input-group w-50">
-                                <input type="text" class="form-control"
+                            <div className="input-group w-50">
+                                <input type="text" className="form-control"
                                     placeholder="Search by Name" aria-label="Recipient’s username"
                                     aria-describedby="basic-addon2" />
-                                <span class="input-group-text" id="basic-addon2">
-                                    <i class="bi bi-search"></i>
+                                <span className="input-group-text" id="basic-addon2">
+                                    <i className="bi bi-search"></i>
                                 </span>
                             </div>
+                            <button type="submit">d a</button>
                         </form>
+                    </div>
+                    <div className="col-6">
+                        <div className="card">
+                            <ul>
+                                {filteredFilm.map(film => {
+
+                                    return (
+                                        <li key={film.id} className={film.genre}>
+                                            {film.title}
+                                        </li>
+
+                                    )
+                                })}
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
