@@ -27,8 +27,8 @@ export default function Main() {
 
         console.log(genre);
         if (genre.length > 0 && searchItem.length > 0) {
-            const filter = filmList.filter(film => film.genre === genre)
-            const foundItems = filter.filter(film => film.title.toLowerCase().includes(searchItem))
+            const selected = filmList.filter(film => film.genre === genre)
+            const foundItems = selected.filter(film => film.title.toLowerCase().includes(searchItem))
             setFilteredFilm(foundItems)
         } else if (genre.length > 0) {
             const filter = filmList.filter(film => film.genre === genre)
@@ -79,7 +79,7 @@ export default function Main() {
         <main>
             <div className="container d-flex justify-content-center">
                 <div className="col-6">
-                    <div className="card">
+                    <div className="card mb-3">
 
                         <AddFilmForm handleSubmit={handleSubmit}
                             setAddTitle={setAddTitle} addTitle={addTitle}
@@ -92,13 +92,14 @@ export default function Main() {
                         />
 
                     </div>
-                    <div className="col-6">
+                    <div className="col-6 w-100">
                         <div className="card">
-                            <ul>
+                            <ul className="list-group list-group-flush">
+
                                 {filteredFilm.map(film => {
 
                                     return (
-                                        <li key={film.id} className={film.genre}>
+                                        <li key={film.id} className="list-group-item text-center">
                                             {film.title}
                                         </li>
 
@@ -111,6 +112,7 @@ export default function Main() {
 
             </div>
         </main>
+
 
     )
 }
