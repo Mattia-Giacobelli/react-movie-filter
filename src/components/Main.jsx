@@ -1,16 +1,17 @@
-import { use } from "react"
 import { useState, useEffect } from "react"
+import AddFilmForm from "./AddFilmForm"
+import FilterForm from "./FilterForm"
 
 
 export default function Main() {
 
     const films = [
-        { id: 1, title: 'Inception', genre: 'Fantascienza' },
-        { id: 2, title: 'Il Padrino', genre: 'Thriller' },
-        { id: 3, title: 'Titanic', genre: 'Romantico' },
-        { id: 4, title: 'Batman', genre: 'Azione' },
-        { id: 5, title: 'Interstellar', genre: 'Fantascienza' },
-        { id: 6, title: 'Pulp Fiction', genre: 'Thriller' },
+        { id: 1, title: 'Inception', genre: 'fantascienza' },
+        { id: 2, title: 'Il Padrino', genre: 'thriller' },
+        { id: 3, title: 'Titanic', genre: 'romantico' },
+        { id: 4, title: 'Batman', genre: 'azione' },
+        { id: 5, title: 'Interstellar', genre: 'fantascienza' },
+        { id: 6, title: 'Pulp Fiction', genre: 'thriller' },
     ]
 
 
@@ -25,14 +26,14 @@ export default function Main() {
     useEffect(() => {
 
         console.log(genre);
-        if (genre.length > 0) {
+        if (genre.length > 0 && searchItem.length > 0) {
+            const filter = filmList.filter(film => film.genre === genre)
+            const foundItems = filter.filter(film => film.title.toLowerCase().includes(searchItem))
+            setFilteredFilm(foundItems)
+        } else if (genre.length > 0) {
             const filter = filmList.filter(film => film.genre === genre)
             setFilteredFilm(filter)
-        } else {
-            setFilteredFilm(filmList)
-        }
-
-        if (searchItem.length > 0) {
+        } else if (searchItem.length > 0) {
             const foundItems = filteredFilm.filter(film => film.title.toLowerCase().includes(searchItem))
             setFilteredFilm(foundItems)
         } else {
@@ -55,21 +56,19 @@ export default function Main() {
             title: addTitle,
             genre: addGenre
         }
-        genreList = getGenres()
+        getGenres()
         setFilmList([...filmList, newFilm])
     }
-
 
     function getGenres() {
         const newGenres = []
         filmList.forEach((film) => {
-            if (!newGenres.includes(film.genre)) {
+            if (!newGenres.includes(film.genre.toLowerCase())) {
 
                 newGenres.push(film.genre)
 
             }
         })
-        console.log(newGenres);
         return newGenres
     }
 
@@ -82,57 +81,16 @@ export default function Main() {
                 <div className="col-6">
                     <div className="card">
 
-                        <form onSubmit={e => { handleSubmit(e) }}
-                            className="d-flex flex-column align-items-center  bg-light">
+                        <AddFilmForm handleSubmit={handleSubmit}
+                            setAddTitle={setAddTitle} addTitle={addTitle}
+                            setAddGenre={setAddGenre} addGenre={addGenre}
+                        />
 
-                            <div className="mb-2 pt-3 w-75 text-center">
-                                <label className="form-label">Title</label>
-                                <input
-                                    onChange={e => { setAddTitle(e.target.value) }}
-                                    type="text"
-                                    className="form-control"
-                                    name="title"
-                                    id="title"
-                                    placeholder='Film title here'
-                                    value={addTitle}
-                                />
-                                <label className="form-label">Genre</label>
-                                <input
-                                    onChange={e => { setAddGenre(e.target.value) }}
-                                    type="text"
-                                    className="form-control"
-                                    name="genre"
-                                    id="genre"
-                                    placeholder='Film genre here'
-                                    value={addGenre}
-                                />
-                            </div>
-                            <button type="submit" className="mb-3 btn btn-primary">Add</button>
+                        <FilterForm genre={genre} setGenre={setGenre}
+                            genreList={genreList} searchItem={searchItem}
+                            setSearchItem={setSearchItem}
+                        />
 
-
-                        </form>
-
-                        <form
-                            className="d-flex justify-content-between align-items-center p-3">
-                            <select value={genre} onChange={e => setGenre(e.target.value)}
-                                className="form-select w-25" aria-label="Default select example">
-                                <option value="">Select a genre</option>
-                                {genreList.map((genre, index) => {
-                                    return (
-                                        <option key={index} value={genre}>{genre}</option>
-                                    )
-                                })}
-                            </select>
-                            <div className="input-group w-50">
-                                <input value={searchItem} onChange={e => setSearchItem(e.target.value)}
-                                    type="search" className="form-control"
-                                    placeholder="Search by Name" aria-label="Recipient’s username"
-                                    aria-describedby="basic-addon2" />
-                                <span className="input-group-text" id="basic-addon2">
-                                    <i className="bi bi-search"></i>
-                                </span>
-                            </div>
-                        </form>
                     </div>
                     <div className="col-6">
                         <div className="card">
